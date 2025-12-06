@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Personal Tax - Step 5 of 5: Summary & Calculation |  Triple Time Tax</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#0a6938', // Dark Green
+                        'brand-darker': '#085a2d',
+                        'dark-primary': '#10b981', // Bright Green for dark mode accents
+                        'dark-card': '#1a1a1a', // Dark background for the main card
+                        'dark-field': '#1f2937', // Darker background for form fields
+                    },
+                    boxShadow: {
+                        'custom': '0 10px 25px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Global Font Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #121212;
+            transition: background-color 300ms, color 300ms;
+        }
+
+        .font-serif-headline {
+            font-family: 'Instrument Serif', serif;
+        }
+
+        /* Dark Mode Color Override */
+        .dark body {
+            color: #ffffff;
+        }
+        
+        .calculation-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .calculation-row-bold {
+            font-weight: 600;
+            border-top: 1px solid #e5e7eb; /* gray-200 */
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            font-size: 1.125rem; /* text-lg */
+        }
+        
+        .dark .calculation-row-bold {
+            border-top: 1px solid #374151; /* gray-700 */
+        }
+
+        .tax-due-row {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #0a6938; /* brand-primary */
+        }
+        
+        .dark .tax-due-row {
+            border-top: 2px solid #10b981; /* dark-primary */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white dark:bg-[#121212] transition-colors duration-300">
+    
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="flex items-center gap-3 animate-fade-slide-down">
+
+                        <!-- Logo -->
+                        <img
+                            src="image/logo.png"
+                            alt="Triple Time Tax Logo"
+                            class="
+                                w-11 h-11
+                                sm:w-12 sm:h-12
+                                md:w-14 md:h-14
+                                object-contain
+                                rounded-lg
+                                bg-white/80
+                                shadow
+                            "
+                        >
+
+                        <!-- Brand Name -->
+                        <span
+                            class="
+                                text-xl
+                                sm:text-2xl
+                                md:text-3xl
+                                font-serif-headline
+                                font-extrabold
+                                tracking-wide
+                                text-gray-900
+                                dark:text-white
+                                leading-none
+                                whitespace-nowrap
+                                drop-shadow-lg
+                            "
+                        >
+                            Triple Time Tax
+                        </span>
+
+                    </div>
+                </a>
+                
+                <nav class="hidden md:flex md:items-center md:space-x-8 lg:space-x-10 ml-11">
+                    <a href="about.html" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-dark-primary transition duration-150 text-base font-medium">About Us</a>
+                    <a href="pricing.html" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-dark-primary transition duration-150 text-base font-medium">Pricing</a>
+                    <a href="tax-reform.html" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-dark-primary transition duration-150 text-base font-medium">Tax Reform</a>
+                    <a href="company-setup.html" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-dark-primary transition duration-150 text-base font-medium">Company Setup</a>
+                    <a href="executive-team.html" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-dark-primary transition duration-150 text-base font-medium">Executive Team</a>
+                    
+                    <div class="flex items-center space-x-3">
+                        <a href="file-individual.html" class="text-base font-medium text-brand-primary dark:text-dark-primary py-2 px-4 rounded-lg bg-gray-100 dark:bg-gray-800 transition duration-150 border-b-2 border-brand-primary dark:border-dark-primary">
+                            File Personal Tax
+                        </a>
+                        <a href="file-buisness.html" class="text-base font-medium text-white bg-brand-primary dark:bg-dark-primary py-2 px-4 rounded-lg shadow-md hover:bg-brand-darker dark:hover:bg-[#059669] transition duration-150">
+                            File Business Tax
+                        </a>
+                        <button id="theme-toggle-desktop" class="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150" aria-label="Toggle dark mode">
+                            <svg class="w-6 h-6 sun-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            <svg class="w-6 h-6 moon-icon block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                        </button>
+                    </div>
+                </nav>
+
+                <div class="flex items-center space-x-3 md:hidden">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150" aria-label="Toggle dark mode">
+                        <svg class="w-6 h-6 sun-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        <svg class="w-6 h-6 moon-icon block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                    </button>
+                    
+                    <button id="menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-lg text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-primary" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="menu-closed-icon h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="menu-open-icon h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-[#1e1e1e] border-t border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="about.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">About Us</a>
+                <a href="pricing.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Pricing</a>
+                <a href="tax-reform.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Tax Reform</a>
+                <a href="company-setup.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Company Setup</a>
+                <a href="executive-team.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Executive Team</a>                
+                <div class="flex flex-col space-y-2 mt-4 pt-2 border-t border-gray-100 dark:border-gray-800">
+                    <a href="file-individual.html" class="text-base font-medium text-brand-primary dark:text-dark-primary w-full text-center py-2 px-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                        File Personal Tax
+                    </a>
+                    <a href="file-buisness.html" class="text-base font-medium text-white bg-brand-primary dark:bg-dark-primary w-full text-center py-2 px-4 rounded-lg shadow-md">
+                        File Business Tax
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+            
+            <p class="text-sm font-medium text-brand-primary dark:text-dark-primary mb-2">Step 5 of 5</p>
+            <div class="flex space-x-1 mb-8">
+                <div class="w-1/5 h-1.5 bg-brand-primary dark:bg-dark-primary rounded-full"></div>
+                <div class="w-1/5 h-1.5 bg-brand-primary dark:bg-dark-primary rounded-full"></div>
+                <div class="w-1/5 h-1.5 bg-brand-primary dark:bg-dark-primary rounded-full"></div>
+                <div class="w-1/5 h-1.5 bg-brand-primary dark:bg-dark-primary rounded-full"></div>
+                <div class="w-1/5 h-1.5 bg-brand-primary dark:bg-dark-primary rounded-full"></div>
+            </div>
+
+            <div class="bg-white dark:bg-dark-card p-8 sm:p-10 rounded-xl shadow-custom">
+                <header class="mb-8 border-b border-gray-100 dark:border-gray-800 pb-6">
+                    <h1 class="text-2xl sm:text-3xl font-serif-headline font-normal leading-tight text-[#121212] dark:text-white mb-2">
+                        Summary and Tax Calculation
+                    </h1>
+                    <p class="text-gray-500 dark:text-gray-400">Review your figures and see your final tax liability for the year.</p>
+                </header>
+
+                <div id="calculation-summary" class="space-y-4">
+                    
+                    <h2 class="text-xl font-semibold text-brand-primary dark:text-dark-primary mb-4">1. Total Income</h2>
+                    
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Salary & Wages:</span>
+                        <span id="display-salary">₦0</span>
+                    </div>
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Other Business Income:</span>
+                        <span id="display-business-income">₦0</span>
+                    </div>
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Rental Income:</span>
+                        <span id="display-rental-income">₦0</span>
+                    </div>
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Interest & Dividends:</span>
+                        <span id="display-invest-income">₦0</span>
+                    </div>
+                    
+                    <div class="calculation-row calculation-row-bold text-[#121212] dark:text-white">
+                        <span>Gross Total Income:</span>
+                        <span id="display-gross-income">₦0</span>
+                    </div>
+
+                    <h2 class="text-xl font-semibold text-brand-primary dark:text-dark-primary pt-8 mb-4 border-t border-dashed border-gray-300 dark:border-gray-700">2. Allowances & Deductions</h2>
+                    
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Consolidation Relief Allowance (CRA):</span>
+                        <span id="display-cra">₦0</span>
+                    </div>
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Other Allowable Deductions:</span>
+                        <span id="display-other-deductions">₦0</span>
+                    </div>
+
+                    <div class="calculation-row calculation-row-bold text-[#121212] dark:text-white">
+                        <span>Total Deductions:</span>
+                        <span id="display-total-deductions">₦0</span>
+                    </div>
+                    
+                    <div class="calculation-row calculation-row-bold text-[#121212] dark:text-white tax-due-row">
+                        <span>Taxable Income (Total Income - Deductions):</span>
+                        <span id="display-taxable-income">₦0</span>
+                    </div>
+
+                    <h2 class="text-xl font-semibold text-brand-primary dark:text-dark-primary pt-8 mb-4 border-t border-dashed border-gray-300 dark:border-gray-700">3. Capital Gains Tax (CGT)</h2>
+                    
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Net Capital Gain (Sale Price - Purchase Price):</span>
+                        <span id="display-net-capital-gain">₦0</span>
+                    </div>
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Capital Gains Tax (10% of Net Gain):</span>
+                        <span id="display-cgt">₦0</span>
+                    </div>
+                    
+                    <h2 class="text-xl font-semibold text-brand-primary dark:text-dark-primary pt-8 mb-4 border-t border-dashed border-gray-300 dark:border-gray-700">4. Final Tax Due</h2>
+
+                    <div class="calculation-row text-gray-700 dark:text-gray-300">
+                        <span class="ml-4">- Personal Income Tax (PIT):</span>
+                        <span id="display-pit">₦0</span>
+                    </div>
+                    
+                    <div class="calculation-row tax-due-row text-brand-primary dark:text-dark-primary">
+                        <span>TOTAL TAX DUE (PIT + CGT):</span>
+                        <span id="display-total-tax-due" class="text-4xl">₦0</span>
+                    </div>
+
+
+                </div>
+
+                <div class="flex justify-between items-center pt-8 border-t border-gray-100 dark:border-gray-800 mt-10">
+                    <a href="file-individual-step4.html" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-700 text-base font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1a1a1a] hover:bg-gray-50 dark:hover:bg-[#1e1e1e] transition duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary">
+                        Review Step 4
+                    </a>
+                    
+                    <button type="button" id="proceed-to-payment" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-brand-primary hover:bg-brand-darker transition duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary dark:bg-dark-primary dark:hover:bg-[#059669]">
+                        Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-[#121212] border-t border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            <!-- Logo & Description -->
+            <div class="mb-8">
+                <a href="index.html" class="flex items-center space-x-2 mb-2">
+                    <div class="flex items-center gap-3">
+                        <img src="image/logo.png" alt="Triple Time Tax Logo" class="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain rounded-lg bg-white/80 shadow">
+                        <span class="text-xl sm:text-1xl md:text-2xl font-serif-headline font-extrabold tracking-wide text-gray-900 dark:text-white leading-none whitespace-nowrap drop-shadow-lg">
+                            Triple Time Tax
+                        </span>
+                    </div>
+                </a>
+                <p class="text-sm">Simplified tax filing for individuals and businesses in Nigeria. Fully compliant with the Triple Time Tax Acts 2025.</p>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-sm">
+                <div>
+                    <h3 class="text-base font-semibold text-[#121212] dark:text-white mb-4">Triple Time Tax</h3>
+                    <ul class="space-y-3">
+                        <li><a href="about.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">About Us</a></li>
+                        <li><a href="executive-team.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Executive Team</a></li>
+                        <li><a href="why-triple-time-tax.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Why Triple Time Tax</a></li>
+                        <li><a href="contact.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-[#121212] dark:text-white mb-4">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="file-individual.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Individual Filing</a></li>
+                        <li><a href="file-buisness.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Business Filing</a></li>
+                        <li><a href="pricing.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-[#121212] dark:text-white mb-4">Resources</h3>
+                    <ul class="space-y-3">
+                        <li><a href="tax-reform.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Tax Reform Explained</a></li>
+                        <li><a href="company-setup.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Company Setup Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-[#121212] dark:text-white mb-4">Legal</h3>
+                    <ul class="space-y-3">
+                        <li><a href="policy.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-brand-primary dark:hover:text-dark-primary transition duration-150">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Upgraded Contact Button -->
+            <div class="mt-8 flex justify-center md:justify-end">
+                <a href="contact.html" class="contact-button inline-flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-brand-darker transition duration-300">
+                    <!-- Icon -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 12H8m8 4H8m4-8H8M12 20h.01M12 4h.01M4 12h.01M20 12h.01"/>
+                    </svg>
+                    Contact Us
+                </a>
+            </div>
+
+            <!-- Copyright & Socials -->
+            <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs">
+                <p>&copy; 2025 Triple Time Tax. All Rights Reserved. A fully compliant Nigerian financial technology company.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0 text-gray-400 dark:text-gray-500">
+                    <svg class="w-5 h-5 hover:text-brand-primary cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.395-2.535 6-2.355 6 2.091v7.144z"/></svg>
+                    <svg class="w-5 h-5 hover:text-brand-primary cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12-12-5.373-12-12 5.373-12 12-12zm6.384 7.025l-2.827 4.09 3.014 4.14h-7.79l-4.22 5.999h-2.155l6.385-9.141-5.717-7.854h2.128l3.619 4.975 4.381-4.975h2.094z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Styles for the upgraded Contact button -->
+        <style>
+            .contact-button {
+                background: linear-gradient(90deg, #0a6938 0%, #059669 100%);
+                transition: transform 0.2s ease, background 0.3s ease;
+            }
+            .contact-button:hover {
+                background: linear-gradient(90deg, #085a2d 0%, #10b981 100%);
+                transform: translateY(-2px) scale(1.02);
+            }
+        </style>
+    </footer>
+    
+<script>
+    // Currency formatting function for Naira (₦)
+    const formatCurrency = (amount) => {
+        // Ensure amount is a number before formatting
+        const numericAmount = parseFloat(amount) || 0;
+        return '₦' + numericAmount.toLocaleString('en-NG', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    };
+
+    // Nigerian Personal Income Tax (PIT) Rate Schedule
+    const PIT_RATES = [
+        { limit: 300000, rate: 0.07 },  // First ₦300,000 at 7%
+        { limit: 300000, rate: 0.11 },  // Next ₦300,000 at 11%
+        { limit: 500000, rate: 0.15 },  // Next ₦500,000 at 15%
+        { limit: 500000, rate: 0.19 },  // Next ₦500,000 at 19%
+        { limit: 1600000, rate: 0.21 },  // Next ₦1,600,000 at 21%
+        { limit: Infinity, rate: 0.24 } // Above ₦3,200,000 at 24%
+    ];
+
+    // PIT Calculation Function - CORRECTED WITH MINIMUM TAX LOGIC
+    const calculatePIT = (taxableIncome, grossTotalIncome) => {
+        let progressiveTaxDue = 0;
+        let remainingIncome = taxableIncome;
+        
+        // 1. Calculate Progressive Tax (Banded Tax Rates)
+        for (const band of PIT_RATES) {
+            if (remainingIncome <= 0) break;
+
+            const incomeInBand = Math.min(remainingIncome, band.limit);
+            progressiveTaxDue += incomeInBand * band.rate;
+            remainingIncome -= incomeInBand;
+        }
+
+        // 2. Calculate Minimum Tax
+        const MIN_TAX_THRESHOLD = 300000;
+        const MIN_TAX_RATE = 0.01; // 1% of Gross Total Income
+
+        let minimumTax = 0;
+        
+        // Minimum Tax rule: Applies if Taxable Income is ₦300,000 or less (and greater than zero)
+        if (taxableIncome > 0 && taxableIncome <= MIN_TAX_THRESHOLD) {
+            minimumTax = grossTotalIncome * MIN_TAX_RATE;
+        }
+        
+        // 3. Final Tax is the GREATER of Progressive Tax or Minimum Tax
+        return Math.max(progressiveTaxDue, minimumTax);
+    };
+    
+    // Main calculation and display function - USES REAL SESSION DATA
+    const performCalculation = () => {
+        
+        // --- 1. RETRIEVE ACTUAL INPUT DATA from Session Storage & URL ---
+        const incomeData = JSON.parse(sessionStorage.getItem('taxEdifice_incomeData')) || {};
+        const deductionData = JSON.parse(sessionStorage.getItem('taxEdifice_deductionData')) || {};
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasCapitalGain = urlParams.get('sold-assets') === 'yes';
+        
+        // A. Income Data (from Step 2)
+        const salary = incomeData.salary || 0;
+        const businessIncome = incomeData.business || 0;
+        const rentalIncome = incomeData.rental || 0;
+        const investIncome = incomeData.invest || 0; // Retrieve other income if available
+        
+        // B. Pre-calculated Figures (from Fixed Step 3)
+        const grossTotalIncome = deductionData.grossTotalIncome || 0;
+        const totalCRA = deductionData.consolidatedRelief || 0; 
+        const otherDeductions = deductionData.totalDeductions || 0; // P+N+I
+        const taxableIncome = deductionData.taxableIncome || 0;
+
+        // C. Capital Gains Data (from Step 4 URL parameters)
+        const assetPurchasePrice = hasCapitalGain ? parseFloat(urlParams.get('purchase-price')) || 0 : 0; 
+        const assetSalePrice = hasCapitalGain ? parseFloat(urlParams.get('sale-price')) || 0 : 0; 
+
+        // --- 2. FINAL CALCULATION LOGIC ---
+        
+        // D. Total Deductions (CRA + Other Allowances) - for display purposes
+        const totalAllDeductions = totalCRA + otherDeductions;
+        
+        // E. Personal Income Tax (PIT): Uses the corrected function with the Minimum Tax check
+        const pit = calculatePIT(taxableIncome, grossTotalIncome);
+
+        // F. Capital Gains Tax (CGT)
+        // Note: CGT is 10% of the Net Gain (Sale Price - Purchase Price)
+        const netCapitalGain = Math.max(0, assetSalePrice - assetPurchasePrice);
+        const cgt = netCapitalGain * 0.10; 
+        
+        // G. Final Tax Due
+        const totalTaxDue = pit + cgt;
+        
+        // --- 3. DISPLAY RESULTS ---
+        
+        // Income Section
+        document.getElementById('display-salary').textContent = formatCurrency(salary);
+        document.getElementById('display-business-income').textContent = formatCurrency(businessIncome);
+        document.getElementById('display-rental-income').textContent = formatCurrency(rentalIncome);
+        document.getElementById('display-invest-income').textContent = formatCurrency(investIncome);
+        document.getElementById('display-gross-income').textContent = formatCurrency(grossTotalIncome);
+        
+        // Deductions Section
+        document.getElementById('display-cra').textContent = formatCurrency(totalCRA);
+        document.getElementById('display-other-deductions').textContent = formatCurrency(otherDeductions);
+        document.getElementById('display-total-deductions').textContent = formatCurrency(totalAllDeductions);
+        
+        // Taxable Income
+        document.getElementById('display-taxable-income').textContent = formatCurrency(taxableIncome);
+
+        // PIT
+        document.getElementById('display-pit').textContent = formatCurrency(pit);
+
+        // CGT
+        document.getElementById('display-net-capital-gain').textContent = formatCurrency(netCapitalGain);
+        document.getElementById('display-cgt').textContent = formatCurrency(cgt);
+
+        // Final Tax Due
+        document.getElementById('display-total-tax-due').textContent = formatCurrency(totalTaxDue);
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Run the calculation on page load
+        performCalculation();
+
+        // --- Menu/Theme Logic (Keep your existing code here) ---
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuOpenIcon = document.querySelector('.menu-open-icon');
+        const menuClosedIcon = document.querySelector('.menu-closed-icon');
+
+        if (menuButton && mobileMenu && menuOpenIcon && menuClosedIcon) {
+            menuButton.addEventListener('click', () => {
+                const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+                menuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                menuClosedIcon.classList.toggle('hidden');
+                menuOpenIcon.classList.toggle('hidden');
+            });
+        }
+
+        const htmlElement = document.documentElement;
+        const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        
+        const setTheme = (theme) => {
+            const desktopSun = themeToggleDesktop ? themeToggleDesktop.querySelector('.sun-icon') : null;
+            const desktopMoon = themeToggleDesktop ? themeToggleDesktop.querySelector('.moon-icon') : null;
+            const mobileSun = themeToggleMobile ? themeToggleMobile.querySelector('.sun-icon') : null;
+            const mobileMoon = themeToggleMobile ? themeToggleMobile.querySelector('.moon-icon') : null;
+
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                
+                if (desktopSun) { desktopSun.classList.remove('hidden'); }
+                if (desktopMoon) { desktopMoon.classList.add('hidden'); }
+                if (mobileSun) { mobileSun.classList.remove('hidden'); }
+                if (mobileMoon) { mobileMoon.classList.add('hidden'); }
+
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                
+                if (desktopSun) { desktopSun.classList.add('hidden'); }
+                if (desktopMoon) { desktopMoon.classList.remove('hidden'); }
+                if (mobileSun) { mobileSun.classList.add('hidden'); }
+                if (mobileMoon) { mobileMoon.classList.remove('hidden'); }
+            }
+        };
+
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+            setTheme(storedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme('dark');
+        } else {
+            setTheme('light');
+        }
+
+        const handleToggle = () => {
+            const currentTheme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        };
+
+        if (themeToggleDesktop) {
+            themeToggleDesktop.addEventListener('click', handleToggle);
+        }
+        if (themeToggleMobile) {
+            themeToggleMobile.addEventListener('click', handleToggle);
+        }
+        // --- End Menu/Theme Logic ---
+        
+        // Placeholder for Payment button action
+        document.getElementById('proceed-to-payment').addEventListener('click', () => {
+            alert('Proceeding to a mock payment page for ₦' + document.getElementById('display-total-tax-due').textContent.replace('₦', '').trim() + '. (Navigation is not implemented in this mockup)');
+        });
+    }); 
+</script>
+</body>
+</html>
